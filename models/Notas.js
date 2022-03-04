@@ -3,15 +3,14 @@ const {Schema, model} = require('mongoose')
 const NotaSchema = Schema({
     title:{
         type: String,
-        required: true,
+
     },
     image:{
         type:String,
-        required: true
     },
     text:{
         type:String,
-        required: true
+    
     }
 })
 

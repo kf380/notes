@@ -8,6 +8,8 @@ const { getNotas, crearNotas, actualizarNota, eliminarNota } = require("../contr
 const router = Router()
 
 
+// Creo la ruta para la creacion de notas
+
 //Obtener notas
 router.get('/',getNotas)
 //Crear una nueva notas

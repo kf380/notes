@@ -1,5 +1,38 @@
 const Notas = require("../models/Notas")
+const multer = require('multer');
+const shortid = require('shortid');
 
+const configMulter = {
+    storage: fileStorage = multer.diskStorage({
+      destination: (req,file,cb)=>{
+        cb(null, __dirname+'./uploads');
+      },
+      filename: (req,file,cb)=>{
+        const extension = file.mimetype.split('/')[1];
+  
+        cb(null,`${shortid.generate()}.${extension}`);
+      }
+    }),
+    fileFilter(req,file,cb){
+      if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+        cb(null,true)
+      }else{
+        cb(null,false)
+      }
+    },
+    limits:{fileSize:200000}
+  }
+  const upload = multer(configMulter).single('image');
+  //subir la imagen
+  exports.uploadImage = async(req,res,next)=>{
+    upload(req,res, function(error){
+      if(error){
+        res.json({msg:error})
+        return next();
+      }
+    });
+    next();
+  };
 
 // //Obtener notas
 // router.get('/',getNotas)
@@ -23,15 +56,19 @@ const getNotas= async(req,res)=>{
 const crearNotas=async(req,res)=>{
 
     const notas = new Notas(req.body)
+    const file = req.file
 
     try{
+        if(file){
+            notas.image = req.file.filename
+        }
 
-       const notasGuardadas = await notas.save()
+        await notas.save()
 
 
-        res.status(201).json({
-            ok:true,
-            notas:notasGuardadas
+        res.json({
+           msg:"Nota creada", 
+           notas
         })
 
     }catch(error){
@@ -67,7 +104,7 @@ const actualizarNota=async(req,res)=>{
 
         res.json({
             ok:true,
-            nota:notaActualizada
+            notaActualizada
         })
 
     }catch(error){

@@ -22,6 +22,8 @@ const crearUsuario = async(req, res) => {
 
     try{
         let usuario = await Usuario.findOne({dni})
+
+    //busco el usuario por dni, si existe no se puede volver a crear
         if(usuario){
             return res.status(400).json({
                 ok:false,
@@ -58,6 +60,7 @@ const loginUsuario = async(req,res)=>{
     try{
 
         const usuario = await Usuario.findOne({dni})
+        //busco el usuario por dni, si no existe se debe crear
         if(!usuario){
             return res.status(400).json({
                 ok:false,

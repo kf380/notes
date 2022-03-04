@@ -3,6 +3,8 @@
     host + /api/auth
 */
 
+// Creo la ruta para la creacion de usuarios
+
 const {Router} = require("express");
 const { crearUsuario, loginUsuario } = require("../controllers/authControllers");
 const router = Router()
